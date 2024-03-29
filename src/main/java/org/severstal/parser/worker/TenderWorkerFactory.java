@@ -8,9 +8,9 @@ public class TenderWorkerFactory {
     public TenderWorker getWorker(String domain, String link, Browser browser) {
         switch (domain) {
             case "tender.pro":
-                return new TenderProWorker(link, browser);
+                return new TenderProWorker(link, browser, link, domain);
             case "etp.tatneft.ru":
-                return new TatneftWorker(link, browser);
+                return new TatneftWorker(link, browser, link, domain);
             case "etp-ets.ru":
                 var split = link.split("/");
                 String type = split[3];
@@ -21,7 +21,7 @@ public class TenderWorkerFactory {
                     split[8] = "view";
                 }
                 var newLink = String.join("/", split);
-                return new EtpEtsWorker(newLink, browser, type);
+                return new EtpEtsWorker(newLink, browser, type, link, domain);
             default:
                 return null;
         }

@@ -9,7 +9,12 @@ public abstract class TenderWorker {
     protected final Browser browser;
     protected final Page page;
 
-    public TenderWorker(String path, Browser browser) {
+    protected final String link;
+    protected final String domain;
+
+    public TenderWorker(String path, Browser browser, String link, String domain) {
+        this.link = link;
+        this.domain = domain;
         this.path = path;
         this.browser = browser;
         this.page = browser.newPage();

@@ -7,6 +7,8 @@ import java.util.List;
 
 public class EtpEtsBuilder {
     private List<Item> items;
+    private String link;
+    private String domain;
 
     public EtpEtsBuilder setItems(List<Item> items) {
         this.items = items;
@@ -14,7 +16,14 @@ public class EtpEtsBuilder {
         return this;
     }
 
+    public EtpEtsBuilder setInfo(String link, String domain) {
+        this.link = link;
+        this.domain = domain;
+
+        return this;
+    }
+
     public Tender Build() {
-        return new EtpEtsTender(this.items);
+        return new EtpEtsTender(this.items, this.link, this.domain);
     }
 }

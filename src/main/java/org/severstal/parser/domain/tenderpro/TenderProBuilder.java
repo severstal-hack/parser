@@ -7,31 +7,18 @@ import java.util.List;
 
 public class TenderProBuilder {
     private String name;
-    private List<String> tags;
-    private List<Doc> docs;
     private List<Item> items;
-    private String organizer;
-    private String comment;
 
-    public TenderProBuilder setName(String name) {
-        this.name = name;
+    private String link;
+    private String domain;
 
-        return this;
-    }
-
-    public TenderProBuilder setInfo(List<String> tags, String organizer, String comment) {
-        this.tags = tags;
-        this.organizer = organizer;
-        this.comment = comment;
+    public TenderProBuilder setInfo(String link, String domain) {
+        this.link = link;
+        this.domain = domain;
 
         return this;
     }
 
-    public TenderProBuilder setDocs(List<Doc> docs) {
-        this.docs = docs;
-
-        return this;
-    }
 
     public TenderProBuilder setItems(List<Item> items) {
         this.items = items;
@@ -40,10 +27,7 @@ public class TenderProBuilder {
     }
 
     public Tender Build() {
-        List<Tag> tags = this.tags.stream().map(Tag::new).toList();
-        Info info = new Info(this.organizer, this.comment);
-
-        return new TenderProTender(this.name, tags, info, docs, items);
+        return new TenderProTender(this.items, this.link, this.domain);
     }
 
 }

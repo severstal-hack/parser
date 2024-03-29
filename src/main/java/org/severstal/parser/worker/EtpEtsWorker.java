@@ -11,12 +11,14 @@ import java.util.List;
 
 @Slf4j(topic = "worker.etp-ets")
 public class EtpEtsWorker extends TenderWorker {
-    private final EtpEtsBuilder builder = new EtpEtsBuilder();
+    private final EtpEtsBuilder builder;
     private final String type;
 
-    public EtpEtsWorker(String path, Browser browser, String type) {
-        super(path, browser);
+    public EtpEtsWorker(String path, Browser browser, String type, String link, String domain) {
+        super(path, browser, link, domain);
         this.type = type;
+        this.builder = new EtpEtsBuilder();
+        this.builder.setInfo(link, domain);
     }
 
     @Override
@@ -27,6 +29,7 @@ public class EtpEtsWorker extends TenderWorker {
     }
 
     private void parseItems() {
+        log.info("starting parse etp-ets; URL: {}", this.page.url());
         switch (this.type) {
             case "44":
                 this.parse44();
@@ -47,7 +50,7 @@ public class EtpEtsWorker extends TenderWorker {
             var name = tds.all().get(3).textContent();
             var count = tds.all().get(4).textContent();
             var unit = tds.all().get(2).textContent();
-            items.add(new Item(name, Double.parseDouble(count), unit));
+            items.add(new Item(name, Double.parseDouble(count.replace(",",".")), unit));
         }
 
         this.builder.setItems(items);
