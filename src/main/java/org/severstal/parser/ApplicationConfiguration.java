@@ -2,17 +2,18 @@ package org.severstal.parser;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Playwright;
+import org.severstal.parser.worker.TenderWorkerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ComponentScan
-public class BrowserConfiguration {
+public class ApplicationConfiguration {
     @Bean
-    public Browser browser() {
-        Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch();
-        return browser;
+    @Scope("singleton")
+    public TenderWorkerFactory tenderWorkerFactory() {
+        return new TenderWorkerFactory();
     }
 }

@@ -1,4 +1,4 @@
-package org.severstal.parser.domain.tatneft;
+package org.severstal.parser.domain.etpets;
 
 import com.google.gson.Gson;
 import lombok.Getter;
@@ -10,10 +10,10 @@ import java.util.List;
 
 @Getter
 @Setter
-public class TatneftTender implements Tender {
+public class EtpEtsTender implements Tender {
     private final List<Item> items;
 
-    public TatneftTender(List<Item> items) {
+    public EtpEtsTender(List<Item> items) {
         this.items = items;
     }
 

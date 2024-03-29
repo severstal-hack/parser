@@ -1,21 +1,20 @@
-package org.severstal.parser.domain.tatneft;
+package org.severstal.parser.domain.etpets;
 
 import org.severstal.parser.domain.Tender;
 import org.severstal.parser.domain.tenderpro.Item;
 
 import java.util.List;
 
-public class TatneftBuilder {
+public class EtpEtsBuilder {
     private List<Item> items;
 
-    public TatneftBuilder setItems(List<Item> items) {
+    public EtpEtsBuilder setItems(List<Item> items) {
         this.items = items;
 
         return this;
     }
 
     public Tender Build() {
-        return new TatneftTender(this.items);
+        return new EtpEtsTender(this.items);
     }
 }
-

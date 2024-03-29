@@ -9,38 +9,36 @@ import com.microsoft.playwright.Playwright;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.impl.AMQImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.severstal.parser.domain.Tender;
 import org.severstal.parser.domain.TenderItem;
 import org.severstal.parser.worker.TatneftWorker;
 import org.severstal.parser.worker.TenderProWorker;
 import org.severstal.parser.worker.TenderWorker;
+import org.severstal.parser.worker.TenderWorkerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+@Slf4j(topic = "rmq.listener")
 @Component
 public class Listener {
-    private final Browser browser;
+    private final TenderWorkerFactory tenderWorkerFactory;
 
-    public Listener(@Autowired Browser browser) {
-        this.browser = browser;
+    public Listener(@Autowired TenderWorkerFactory tenderWorkerFactory) {
+        this.tenderWorkerFactory = tenderWorkerFactory;
     }
 
     @RabbitListener(queues = "p-queue")
     public void worker(String message) throws Exception {
         Thread th = new Thread(() -> {
-            System.out.println("test");
+            log.debug("Received new RMQ message");
             Gson gson = new Gson();
             TenderItem item = gson.fromJson(message, TenderItem.class);
             Playwright playwright = Playwright.create();
             Browser browser = playwright.chromium().launch();
-            TenderWorker tenderWorker = switch (item.getDomain()) {
-                case "tender.pro" -> new TenderProWorker(item.getLink(), browser);
-                case "etp.tatneft.ru" -> new TatneftWorker(item.getLink(), browser);
-                case "etp-ets.ru" -> new TatneftWorker(item.getLink(), browser);
-                default -> throw new IllegalStateException("Unexpected value: " + item.getDomain());
-            };
-            tenderWorker.run();
+            TenderWorker tenderWorker = this.tenderWorkerFactory.getWorker(item.getDomain(), item.getLink(), browser);
+            Tender tender = tenderWorker.run();
+            System.out.println(tender.getJSON());
         });
         th.start();
         th.join();
