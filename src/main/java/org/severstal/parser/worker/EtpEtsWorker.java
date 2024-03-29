@@ -8,7 +8,6 @@ import org.severstal.parser.domain.tenderpro.Item;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Slf4j(topic = "worker.etp-ets")
 public class EtpEtsWorker extends TenderWorker {
@@ -26,7 +25,6 @@ public class EtpEtsWorker extends TenderWorker {
 
         return this.builder.Build();
     }
-
 
     private void parseItems() {
         switch (this.type) {
@@ -56,6 +54,18 @@ public class EtpEtsWorker extends TenderWorker {
     }
 
     private void parse223() {
+        var fieldset = this.page.locator("fieldset.collection-grid").last();
+        var trs = fieldset.locator("tbody > tr.form-block");
+        List<Item> items = new ArrayList<Item>();
+        for (int i = 0; i < trs.count(); ++i) {
+            var row = trs.all().get(i);
+            var tds = row.locator("td");
+            var name = tds.all().get(2).textContent();
+            var count = tds.all().get(9).textContent();
+            var unit = tds.all().get(8).textContent();
+            items.add(new Item(name, Double.parseDouble(count), unit));
+        }
 
+        this.builder.setItems(items);
     }
 }

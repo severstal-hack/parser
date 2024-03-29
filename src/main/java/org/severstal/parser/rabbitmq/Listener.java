@@ -19,6 +19,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Slf4j(topic = "rmq.listener")
 @Component
 public class Listener {
@@ -30,17 +32,15 @@ public class Listener {
 
     @RabbitListener(queues = "p-queue")
     public void worker(String message) throws Exception {
-        Thread th = new Thread(() -> {
-            log.debug("Received new RMQ message");
-            Gson gson = new Gson();
-            TenderItem item = gson.fromJson(message, TenderItem.class);
+        log.debug("Received new RMQ message");
+        Gson gson = new Gson();
+        List<TenderItem> items = List.of(gson.fromJson(message, TenderItem[].class));
+        for (TenderItem item : items) {
             Playwright playwright = Playwright.create();
             Browser browser = playwright.chromium().launch();
             TenderWorker tenderWorker = this.tenderWorkerFactory.getWorker(item.getDomain(), item.getLink(), browser);
             Tender tender = tenderWorker.run();
             System.out.println(tender.getJSON());
-        });
-        th.start();
-        th.join();
+        }
     }
 }

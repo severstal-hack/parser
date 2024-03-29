@@ -18,7 +18,7 @@ public class TenderWorkerFactory {
                     split[5] = "items";
                 else {
                     split[7] = "lot";
-                    split[8] = "viewList";
+                    split[8] = "view";
                 }
                 var newLink = String.join("/", split);
                 return new EtpEtsWorker(newLink, browser, type);

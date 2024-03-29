@@ -42,7 +42,7 @@ public class RabbitMQConfiguration {
 
     @Bean
     public FanoutExchange fanoutExchange() {
-        return new FanoutExchange("p-queue");
+        return new FanoutExchange("p-exchange");
     }
 
     @Bean
