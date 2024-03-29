@@ -13,6 +13,8 @@
 
 - `CLICKHOUSE_USERNAME` - Имя пользователя для доступа к Clickhouse
 - `CLICKHOUSE_PASSWORD` - Имя пароль для доступа к Clickhouse
+- `RMQ_USERNAME` - Имя пользователя для доступа к RabbitMQ
+- `RMQ_PASSWORD` - Имя пароль для доступа к RabbitMQ
 
 ### Зависимости
 
