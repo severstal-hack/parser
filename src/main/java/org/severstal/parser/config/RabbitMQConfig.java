@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 @Setter
 @Getter
 @Component
-@ConfigurationProperties(prefix = "app")
-public class ApplicationConfig {
-    private String grpcHost;
-    private int grpcPort;
+@ConfigurationProperties(prefix = "rabbitmq")
+public class RabbitMQConfig {
+    private String hostname;
+    private String username;
+    private String password;
 }
